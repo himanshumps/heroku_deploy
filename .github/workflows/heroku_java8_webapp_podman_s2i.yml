@@ -31,4 +31,4 @@ jobs:
     - name: Heroku release the pushed image
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku container:release web -a ${{ github.event.inputs.herokuProjectName }} web 
+      run: heroku container:release web -a ${{ github.event.inputs.herokuProjectName }} 
