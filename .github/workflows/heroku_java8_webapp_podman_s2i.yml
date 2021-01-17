@@ -1,0 +1,22 @@
+name: Docker Image CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      sourceCodeGitRepo: 
+        description: Git repo for the java webapp fat jar application
+        required: true
+        default: https://github.com/himanshumps/vertx-starter.git
+      herokuProjectName:
+        description: Heroku project name where the application needs to be deployed
+        required: true
+        default: vertxdemo23170
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: List directory details
+      run: pwd && ls -altrR
+    - name: Build the docker image using s2i light with podman
+      run: ./s2i-light.sh build ${{ github.event.inputs.sourceCodeGitRepo }} registry.hub.docker.com/himanshumps/ubi_java8 registry.heroku.com/himanshumps/${{ github.event.inputs.sourceCodeGitRepo }}/web -v /hackathon/ubi8_java/maven/:/tmp/maven/settings/
