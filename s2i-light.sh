@@ -220,7 +220,7 @@ EOF
 
     # Run the build and tag the result
     # shellcheck disable=SC2086
-    $(_get_runtime) build $mount_options -f "$df_name" --no-cache=true -t "$dst_image" .
+    $(_get_runtime) build $mount_options -f "$df_name" -t "$dst_image" .
     echo
     echo "Image $dst_image successfully built."
     )
