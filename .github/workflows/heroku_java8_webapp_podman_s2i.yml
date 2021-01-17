@@ -21,7 +21,7 @@ jobs:
     - name: Check heroku version
       run: heroku --version
     - name: Build the docker image using s2i light with podman
-      run: ./s2i-light.sh build ${{ github.event.inputs.sourceCodeGitRepo }} registry.hub.docker.com/himanshumps/ubi_java8 registry.heroku.com/himanshumps/${{ github.event.inputs.herokuProjectName }}/web -v $(pwd)/maven/:/tmp/maven/settings/:Z
+      run: chmod 777 s2i-light.sh && ./s2i-light.sh build ${{ github.event.inputs.sourceCodeGitRepo }} registry.hub.docker.com/himanshumps/ubi_java8 registry.heroku.com/himanshumps/${{ github.event.inputs.herokuProjectName }}/web -v $(pwd)/maven/:/tmp/maven/settings/:Z
     - name: Login into heroku registry
       run: podman login --username=${{ secrets.HEROKU_EMAIL }} --password=${{ secrets.HEROKU_API_KEY }} registry.heroku.com
     - name: Push the image to heroku registry
