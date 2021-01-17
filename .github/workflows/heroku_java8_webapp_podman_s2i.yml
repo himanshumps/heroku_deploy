@@ -29,7 +29,7 @@ jobs:
     - name: Login into heroku registry
       run: podman login --username=${{ secrets.HEROKU_EMAIL }} --password=${{ secrets.HEROKU_API_KEY }} registry.heroku.com
     - name: Push the image to heroku registry
-      run: podman --log-level=debug push docker://registry.heroku.com/${{ github.event.inputs.herokuProjectName }}/web
+      run: podman --format=v2s2 push docker://registry.heroku.com/${{ github.event.inputs.herokuProjectName }}/web
     - name: Heroku release the pushed image
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
