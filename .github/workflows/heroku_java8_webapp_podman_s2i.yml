@@ -18,19 +18,17 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install heroku toolchain
       run: sudo snap install --classic heroku
-    - name: Check heroku version
-      run: heroku --version
+    - name: Check heroku version && login
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: heroku --version && heroku container:login
     - name: Build the docker image using s2i light with podman
-      run: chmod 777 s2i-light.sh && ./s2i-light.sh build ${{ github.event.inputs.sourceCodeGitRepo }} registry.hub.docker.com/himanshumps/ubi_java8 registry.heroku.com/himanshumps/${{ github.event.inputs.herokuProjectName }}/web -v $(pwd)/maven/:/tmp/maven/settings/:Z
+      run: chmod 777 s2i-light.sh && ./s2i-light.sh build ${{ github.event.inputs.sourceCodeGitRepo }} registry.hub.docker.com/himanshumps/ubi_java8 registry.heroku.com/${{ github.event.inputs.herokuProjectName }}/web -v $(pwd)/maven/:/tmp/maven/settings/:Z
     - name: Login into heroku registry
       run: podman login --username=${{ secrets.HEROKU_EMAIL }} --password=${{ secrets.HEROKU_API_KEY }} registry.heroku.com
     - name: Push the image to heroku registry
-      run: podman push registry.heroku.com/himanshumps/${{ github.event.inputs.herokuProjectName }}/web
-    - name: Release the new image
+      run: podman push registry.heroku.com/${{ github.event.inputs.herokuProjectName }}/web
+    - name: Heroku release the pushed image
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku container:push -a appname web 
-    - name: Release
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku container:login && heroku container:release web -a ${{ github.event.inputs.herokuProjectName }} web 
+      run: heroku container:release web -a ${{ github.event.inputs.herokuProjectName }} web 
