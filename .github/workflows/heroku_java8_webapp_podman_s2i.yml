@@ -19,4 +19,4 @@ jobs:
     - name: List directory details
       run: pwd && ls -altrR
     - name: Build the docker image using s2i light with podman
-      run: ./s2i-light.sh build ${{ github.event.inputs.sourceCodeGitRepo }} registry.hub.docker.com/himanshumps/ubi_java8 registry.heroku.com/himanshumps/${{ github.event.inputs.sourceCodeGitRepo }}/web -v /hackathon/ubi8_java/maven/:/tmp/maven/settings/
+      run: ./s2i-light.sh build ${{ github.event.inputs.sourceCodeGitRepo }} registry.hub.docker.com/himanshumps/ubi_java8 registry.heroku.com/himanshumps/${{ github.event.inputs.sourceCodeGitRepo }}/web -v $(pwd)/maven/:/tmp/maven/settings/
